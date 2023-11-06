@@ -13,21 +13,26 @@ const AccBalance = () => {
   }
   const handleSaveBalance = async () => {
     if (newBalance !== null) {
+      // setBalance(newBalance)
       try {
-        const response = await axios.post("http://localhost:8080/api/update-balance", {
-          balance: newBalance,
-        });
-        if (response.status === 200) {
+        const response = await axios.post(
+          "http://localhost:8080/api/update-balance",
+          {
+            userBalance: newBalance, // Send newBalance as an object property
+          }
+        );
+        if (response.status === 201) {
           setBalance(newBalance);
-          setIsAdjustingBalance(false);
         } else {
-          console.error("failed to update balance");
+          console.error("Failed to update balance");
         }
       } catch (error) {
-        console.error("An error occured while updating balance: ", error);
+        console.error("An error occurred while updating balance: ", error);
       }
+      setIsAdjustingBalance(false);
     }
   };
+
   function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Enter") {
       handleSaveBalance();
