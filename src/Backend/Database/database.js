@@ -1,7 +1,7 @@
 const express = require("express")
 const { Pool } = require('pg')
 const port = 8080;
-
+const cors = require(cors)
 
 
 const app = express();
@@ -33,6 +33,10 @@ async function financeBalance() {
 }
 
 financeBalance();
+const corsOptions = {
+    origin : 'http://localhost:3000'
+};
+app.use(cors(corsOptions));
 
 app.listen(port, () => {
     console.log(`app listening on port ${port}`)
