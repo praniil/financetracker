@@ -21,6 +21,7 @@ const AccBalance = () => {
             userBalance: newBalance, // Send newBalance as an object property
           }
         );
+        console.log("response", response);
         if (response.status === 201) {
           setBalance(newBalance);
         } else {
