@@ -22,7 +22,7 @@ const AccBalance = () => {
           }
         );
         console.log("response", response);
-        if (response.status === 201) {
+        if (response.status === 200) {
           setBalance(newBalance);
         } else {
           console.error("Failed to update balance");

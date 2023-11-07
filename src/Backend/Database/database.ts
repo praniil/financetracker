@@ -17,4 +17,4 @@ client
     console.error("Error connecting to Postgresql", error);
   });
 
-module.exports(Client);
+export default client;

@@ -17,3 +17,4 @@ client
     .catch(function (error) {
     console.error("Error connecting to Postgresql", error);
 });
+exports.default = client;
