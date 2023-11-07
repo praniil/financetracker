@@ -40,23 +40,24 @@ const AccBalance = () => {
     }
   }
   return (
-    <div>
-      <div>Cash: {balance}</div>
+    <div className="flex justify-center space-x-4">
+      <div className="m-1 p-1">Cash: {balance}</div>
 
       {isAdjustingBalance ? (
         <div>
           <input
-            type="number"
+            type="text"
+            className="border-blue-300"
             value={newBalance || ""}
             onChange={(event) =>
               handleBalanceChange(Number(event.target.value))
             }
             onKeyDown={handleKeyPress}
           />
-          <button onClick={handleSaveBalance}> Done </button>
+          <button onClick={handleSaveBalance} className="bg-blue-500 text-white rounded-sm p-1 m-1"> Done </button>
         </div>
       ) : (
-        <button onClick={handleBalance}> Adjust Balance </button>
+        <button onClick={handleBalance} className="bg-blue-500 text-white rounded-sm p-1 m-1"> Adjust Balance </button>
       )}
     </div>
   );
