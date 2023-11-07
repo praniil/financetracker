@@ -18,10 +18,17 @@ app.get("/api/update-balance", (req: Request, res: Response) => {
   res.send("Hello World");
 });
 
-app.post("/api/update-balance", (req: Request, res: Response) => {
-  const requestBody = req.body;
-  console.log(requestBody);
-  res.json({ requestBody });
+app.post("/api/update-balance", async (req: Request, res: Response) => {
+  const { userBalance } = req.body;
+  console.log(userBalance);
+  res.json(userBalance);
+  try {
+    const insertQuery = "INSERT INTO finbalance (balance) Values ($1) ";
+    await db.query(insertQuery, [userBalance]);
+    // res.status(201).json({ message: "Balance updated successfully" });
+  } catch (error) {
+    console.error("Error updating balance: ", error);
+  }
 });
 
 app.listen(port, () => {
