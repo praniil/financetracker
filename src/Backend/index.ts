@@ -23,8 +23,10 @@ app.post("/api/update-balance", async (req: Request, res: Response) => {
   console.log(userBalance);
   res.json(userBalance);
   try {
-    const insertQuery = "INSERT INTO finbalance (balance) Values ($1) ";
-    await db.query(insertQuery, [userBalance]);
+    // const insertQuery = "INSERT INTO finbalance (balance) Values ($1) ";
+    // await db.query(insertQuery, [userBalance]);
+    const updateQuery = "UPDATE finbalance SET balance=$1 WHERE id =1";
+    await db.query(updateQuery, [userBalance]);
     // res.status(201).json({ message: "Balance updated successfully" });
   } catch (error) {
     console.error("Error updating balance: ", error);

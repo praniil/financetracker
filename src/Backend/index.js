@@ -50,7 +50,7 @@ app.get("/api/update-balance", function (req, res) {
     res.send("Hello World");
 });
 app.post("/api/update-balance", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var userBalance, insertQuery, error_1;
+    var userBalance, updateQuery, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -60,8 +60,8 @@ app.post("/api/update-balance", function (req, res) { return __awaiter(void 0, v
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                insertQuery = "INSERT INTO finbalance (balance) Values ($1) ";
-                return [4 /*yield*/, database_1.default.query(insertQuery, [userBalance])];
+                updateQuery = "UPDATE finbalance SET balance=$1 WHERE id =1";
+                return [4 /*yield*/, database_1.default.query(updateQuery, [userBalance])];
             case 2:
                 _a.sent();
                 return [3 /*break*/, 4];
