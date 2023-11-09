@@ -24,9 +24,9 @@ const NewRecord = () => {
   }
 
   const [newRecord, setNewRecord] = useState<newRecord>({
-    typeNew: "",
+    typeNew: "Income",
     amount: null,
-    category: "",
+    category: "Income",
   });
 
   function handleRecordChange(event: any) {
@@ -61,6 +61,7 @@ const NewRecord = () => {
         <input
           className="w-full p-2 mb-4 border border-gray-300 rounded-md focus:outline-none"
           type="text"
+          inputMode="numeric"
           name="amount"
           id="amount"
           placeholder="Amount"
