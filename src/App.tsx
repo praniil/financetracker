@@ -15,12 +15,21 @@ function App() {
       <div>
         <Navbar/>
         <Routes>
-          <Route path="/" element={<AccBalance />} />
+          <Route
+            path="/"
+            element={
+              <AccBalance>
+                <Routes>
+                  <Route path="/template" element={<Template />} />
+                  <Route path="/newRecord" element={<NewRecord />} />
+                </Routes>
+              </AccBalance>
+            }
+          />
           {/* <Stats/> */}
-          <Route path="/addAccount" element={<AddAccount/>} />
-          <Route path="/template" element={<Template/>} />
-          <Route path="/newRecord" element={<NewRecord/>} />
-
+          <Route path="/addAccount" element={<AddAccount />} />
+          <Route path="/template" element={<Template />} />
+          <Route path="/newRecord" element={<NewRecord />} />
         </Routes>
       </div>
     </BrowserRouter>
