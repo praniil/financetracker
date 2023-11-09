@@ -1,7 +1,29 @@
-import React from "react";
+import React, { useContext } from "react";
+import { ProfileContext } from "./AccBalance";
 import { useState } from "react";
 
-const NewRecord = () => {
+const NewRecord: React.FC = () => {
+  const profileContext = useContext(ProfileContext);
+  interface newRecord {
+    typeNew: string;
+    amount: number;
+    category: string;
+  }
+
+  const [newRecord, setNewRecord] = useState<newRecord>({
+    typeNew: "Income",
+    amount: 0,
+    category: "Income",
+  });
+
+  if (!profileContext) {
+    return (
+      <div className="h-screen bg-gray-100 flex justify-center items-start">
+        Loading...
+      </div>
+    );
+  }
+  const { balance, setBalance } = profileContext || {};
   const expenseType: string[] = ["INCOME", "Expense"];
   const category: string[] = [
     "Income",
@@ -17,18 +39,6 @@ const NewRecord = () => {
     "Other",
   ];
 
-  interface newRecord {
-    typeNew: string;
-    amount: number | null;
-    category: string;
-  }
-
-  const [newRecord, setNewRecord] = useState<newRecord>({
-    typeNew: "Income",
-    amount: null,
-    category: "Income",
-  });
-
   function handleRecordChange(event: any) {
     const { name, value } = event.target;
     setNewRecord({
@@ -43,10 +53,15 @@ const NewRecord = () => {
     console.log("Type: ", newRecord.typeNew);
     console.log("Amount: ", newRecord.amount);
     console.log("Category: ", newRecord.category);
+    if (newRecord.typeNew === "INCOME") {
+      setBalance(balance + newRecord.amount);
+      console.log(balance);
+    }
   }
 
   return (
     <div className="h-screen bg-gray-100 flex justify-center items-start">
+      {balance}
       <div className="bg-white p-8 rounded-md shadow-md w-96 mt-8">
         <select
           className="w-full p-2 mb-4 border border-gray-300 rounded-md focus:outline-none"
@@ -54,7 +69,7 @@ const NewRecord = () => {
           id="typeNew"
           onChange={handleRecordChange}
         >
-          {expenseType.map((content, index) => (
+          {expenseType.map((content: string, index: number) => (
             <option key={index}>{content}</option>
           ))}
         </select>
@@ -73,7 +88,7 @@ const NewRecord = () => {
           id="category"
           onChange={handleRecordChange}
         >
-          {category.map((category, index) => (
+          {category.map((category: string, index: number) => (
             <option key={index}>{category}</option>
           ))}
         </select>
