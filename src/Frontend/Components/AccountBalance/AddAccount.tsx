@@ -18,8 +18,8 @@ const AddAccount = () => {
   const [userDetails, setUserDetails] = useState<iAddAccout>({
     accname: "",
     initialbalance: "",
-    accounttype: "",
-    currencytype: "",
+    accounttype: "General",
+    currencytype: "NPR",
   });
   const [done, setDone] = useState<boolean>(false);
   function handleDone(event: React.FormEvent) {
