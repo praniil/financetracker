@@ -76,7 +76,7 @@ const AccBalance = () => {
               Done{" "}
             </button>
           </div>
-        ) : (
+        ) : ( 
           <button
             onClick={handleBalance}
             className="bg-slate-500 text-white rounded-md p-1 m-1"
