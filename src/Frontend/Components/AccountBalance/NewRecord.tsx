@@ -1,9 +1,7 @@
-import React, { useContext } from "react";
-import { ProfileContext } from "./AccBalance";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 
 const NewRecord: React.FC = () => {
-  const profileContext = useContext(ProfileContext);
   interface newRecord {
     typeNew: string;
     amount: number;
@@ -16,14 +14,6 @@ const NewRecord: React.FC = () => {
     category: "Income",
   });
 
-  if (!profileContext) {
-    return (
-      <div className="h-screen bg-gray-100 flex justify-center items-start">
-        Loading...
-      </div>
-    );
-  }
-  const { balance, setBalance } = profileContext || {};
   const expenseType: string[] = ["INCOME", "Expense"];
   const category: string[] = [
     "Income",
@@ -53,15 +43,11 @@ const NewRecord: React.FC = () => {
     console.log("Type: ", newRecord.typeNew);
     console.log("Amount: ", newRecord.amount);
     console.log("Category: ", newRecord.category);
-    if (newRecord.typeNew === "INCOME") {
-      setBalance(balance + newRecord.amount);
-      console.log(balance);
-    }
+    
   }
 
   return (
     <div className="h-screen bg-gray-100 flex justify-center items-start">
-      {balance}
       <div className="bg-white p-8 rounded-md shadow-md w-96 mt-8">
         <select
           className="w-full p-2 mb-4 border border-gray-300 rounded-md focus:outline-none"
