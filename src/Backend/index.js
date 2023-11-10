@@ -46,11 +46,29 @@ app.use(cors({
     origin: "http://localhost:3000",
 }));
 app.use(bodyParser.json());
-app.get("/api/update-balance", function (req, res) {
-    res.send("Hello World");
-});
+app.get("/api/get-balance", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var result, balance, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, database_1.default.query("SELECT balance FROM finbalance WHERE id = 1")];
+            case 1:
+                result = _a.sent();
+                balance = result.rows[0].balance;
+                res.json({ balance: balance });
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                console.error("Error fetching balance: ", error_1);
+                res.status(500).json({ error: "Internal Server Error" });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
 app.post("/api/update-balance", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var userBalance, updateQuery, error_1;
+    var userBalance, updateQuery, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -66,8 +84,8 @@ app.post("/api/update-balance", function (req, res) { return __awaiter(void 0, v
                 _a.sent();
                 return [3 /*break*/, 4];
             case 3:
-                error_1 = _a.sent();
-                console.error("Error updating balance: ", error_1);
+                error_2 = _a.sent();
+                console.error("Error updating balance: ", error_2);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }

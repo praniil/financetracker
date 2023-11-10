@@ -13,20 +13,9 @@ function App() {
   return (
     <BrowserRouter>
       <div>
-        <Navbar/>
+        <Navbar />
         <Routes>
-          <Route
-            path="/"
-            element={
-              <AccBalance>
-                <Routes>
-                  <Route path="/template" element={<Template />} />
-                  <Route path="/newRecord" element={<NewRecord />} />
-                </Routes>
-              </AccBalance>
-            }
-          />
-          {/* <Stats/> */}
+          <Route path="/" element={<AccBalance />} />
           <Route path="/addAccount" element={<AddAccount />} />
           <Route path="/template" element={<Template />} />
           <Route path="/newRecord" element={<NewRecord />} />
