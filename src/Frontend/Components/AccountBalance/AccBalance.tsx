@@ -2,9 +2,17 @@ import React, { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const AccBalance: React.FC = () => {
+interface AccBalanceProps {
+  passBalance : {
+    balance : number;
+    setBalance : React.Dispatch<React.SetStateAction<number>>
+  }
+}
+
+const AccBalance: React.FC <AccBalanceProps> = ({passBalance}) => {
   //useStates
-  const [balance, setBalance] = useState<number>(0);
+  // const [balance, setBalance] = useState<number>(0);
+  const {balance, setBalance} = passBalance;
   const [isAdjustingBalance, setIsAdjustingBalance] = useState<boolean>(false);
   const [newBalance, setNewBalance] = useState<number | null>(null);
   const [isDropdown, setIsDropdown] = useState<boolean>(false);
