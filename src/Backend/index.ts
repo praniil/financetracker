@@ -14,8 +14,17 @@ app.use(
 );
 app.use(bodyParser.json());
 
-app.get("/api/update-balance", (req: Request, res: Response) => {
-  res.send("Hello World");
+app.get("/api/get-balance", async (req: Request, res: Response) => {
+  try {
+    const result = await db.query(
+      "SELECT balance FROM finbalance WHERE id = 1"
+    );
+    const balance = result.rows[0].balance;
+    res.json({ balance });
+  } catch (error) {
+    console.error("Error fetching balance: ", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 app.post("/api/update-balance", async (req: Request, res: Response) => {
@@ -36,4 +45,3 @@ app.post("/api/update-balance", async (req: Request, res: Response) => {
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });
- 
