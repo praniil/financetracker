@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { useState } from "react";
+import { Pie } from "react-chartjs-2";
 
 interface balanceInterface {
   passBalance: {
@@ -62,20 +63,43 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
     console.log(newRecord);
   }
 
+  function getRandomColor() {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+  const [fields, setFields] = useState<string[]>([]);
+  interface pieData {
+    data: number[];
+    backgroundColor: string[];
+  }
+  const [dataset, setDataset] = useState<pieData>({
+    data: [],
+    backgroundColor: [],
+  });
+
   function handleAddRecord(event: React.FormEvent) {
     event.preventDefault();
-    console.log(typeof balance);
-    console.log(typeof newRecord.amount);
     if (newRecord.typeNew === expenseType[0]) {
       setBalance(
         (prevBalance) => Number(prevBalance) + Number(newRecord.amount)
       );
-      console.log("balancein newRec: ", balance);
+      setFields([...fields, newRecord.typeNew]);
+      setDataset({
+        ...dataset,
+        data: [newRecord.amount],
+        backgroundColor: [getRandomColor()],
+      });
     }
-    console.log("Type: ", newRecord.typeNew);
-    console.log("Amount: ", newRecord.amount);
-    console.log("Category: ", newRecord.category);
   }
+  const data = {
+    labels: fields,
+    datasets: [dataset],
+  };
 
   return (
     <div className="h-screen bg-gray-100 flex justify-center items-start">
@@ -117,6 +141,9 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
         >
           Add Record
         </button>
+      </div>
+      <div>
+        <Pie data={data} />
       </div>
     </div>
   );
