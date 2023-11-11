@@ -11,16 +11,37 @@ import Template from "./Frontend/Components/AccountBalance/Template";
 import NewRecord from "./Frontend/Components/AccountBalance/NewRecord";
 
 function App() {
+  interface newRecord {
+    typeNew: string;
+    amount: number;
+    category: string;
+  }
   const [balance, setBalance] = useState<number>(0);
+  const [newRecord, setNewRecord] = useState<newRecord>({
+    typeNew: "INCOME",
+    amount: 0,
+    category: "Income",
+  });
   return (
     <BrowserRouter>
       <div>
         <Navbar />
         <Routes>
-          <Route path="/" element={<AccBalance passBalance = {{balance, setBalance}}/>} />
-          <Route path="/addAccount" element={<AddAccount  />} />
+          <Route
+            path="/"
+            element={
+              <>
+                <AccBalance passBalance={{ balance, setBalance }} />
+                <Stats passRecord={{ newRecord, setNewRecord}} />{" "}
+              </>
+            }
+          />
+          <Route path="/addAccount" element={<AddAccount />} />
           <Route path="/template" element={<Template />} />
-          <Route path="/newRecord" element={<NewRecord passBalance = {{balance, setBalance}}/>} />
+          <Route
+            path="/newRecord"
+            element={<NewRecord passBalance={{ balance, setBalance }} passRecord={{ newRecord, setNewRecord}} />}
+          />
         </Routes>
       </div>
     </BrowserRouter>
