@@ -2,23 +2,41 @@ import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 
 interface balanceInterface {
-  passBalance : {
-    balance : number,
-    setBalance : React.Dispatch<React.SetStateAction<number>>
-  }
+  passBalance: {
+    balance: number;
+    setBalance: React.Dispatch<React.SetStateAction<number>>;
+  };
 }
-const NewRecord: React.FC <balanceInterface> = ({passBalance}) => {
-  interface newRecord {
-    typeNew: string;
-    amount: number;
-    category: string;
-  }
-  const {balance, setBalance} = passBalance;
-  const [newRecord, setNewRecord] = useState<newRecord>({
-    typeNew: "INCOME",
-    amount: 0,
-    category: "Income",
-  });
+interface recordInterface {
+  passRecord: {
+    newRecord: {
+      typeNew: string;
+      amount: number;
+      category: string;
+    };
+    setNewRecord: React.Dispatch<
+      React.SetStateAction<{
+        typeNew: string;
+        amount: number;
+        category: string;
+      }>
+    >;
+  };
+}
+type props = balanceInterface & recordInterface;
+const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
+  // interface newRecord {
+  //   typeNew: string;
+  //   amount: number;
+  //   category: string;
+  // }
+  const { balance, setBalance } = passBalance;
+  const { newRecord, setNewRecord } = passRecord;
+  // const [newRecord, setNewRecord] = useState<newRecord>({
+  //   typeNew: "INCOME",
+  //   amount: 0,
+  //   category: "Income",
+  // });
 
   const expenseType: string[] = ["INCOME", "Expense"];
   const category: string[] = [
@@ -46,20 +64,22 @@ const NewRecord: React.FC <balanceInterface> = ({passBalance}) => {
 
   function handleAddRecord(event: React.FormEvent) {
     event.preventDefault();
-    console.log(typeof(balance))
-    console.log(typeof(newRecord.amount));
-    if(newRecord.typeNew === expenseType[0]  ) {
-      setBalance((prevBalance ) => Number(prevBalance) + Number(newRecord.amount));
+    console.log(typeof balance);
+    console.log(typeof newRecord.amount);
+    if (newRecord.typeNew === expenseType[0]) {
+      setBalance(
+        (prevBalance) => Number(prevBalance) + Number(newRecord.amount)
+      );
       console.log("balancein newRec: ", balance);
     }
     console.log("Type: ", newRecord.typeNew);
     console.log("Amount: ", newRecord.amount);
-    console.log("Category: ", newRecord.category);  
+    console.log("Category: ", newRecord.category);
   }
 
   return (
     <div className="h-screen bg-gray-100 flex justify-center items-start">
-      balance: {(balance)}
+      balance: {balance}
       <div className="bg-white p-8 rounded-md shadow-md w-96 mt-8">
         <select
           className="w-full p-2 mb-4 border border-gray-300 rounded-md focus:outline-none"
