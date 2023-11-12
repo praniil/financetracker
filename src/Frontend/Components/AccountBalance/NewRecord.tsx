@@ -1,5 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { useState } from "react";
+//npm uninstall react-chartjs-2 chart.js
+// npm install react-chartjs-2@latest chart.js@latest
 import { Pie } from "react-chartjs-2";
 import "chart.js/auto";
 
@@ -91,11 +93,13 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
       setBalance(
         (prevBalance) => Number(prevBalance) + Number(newRecord.amount)
       );
-      setFields((prevFields) => [...prevFields, newRecord.category]);
-      setDataset((prevDataset) => ({
-        data: [...prevDataset.data, newRecord.amount],
-        backgroundColor: [...prevDataset.backgroundColor, getRandomColor()],
-      }));
+      if (newRecord.category !== "Income" && newRecord.typeNew !== "INCOME") {
+        setFields((prevFields) => [...prevFields, newRecord.category]);
+        setDataset((prevDataset) => ({
+          data: [...prevDataset.data, newRecord.amount],
+          backgroundColor: [...prevDataset.backgroundColor, getRandomColor()],
+        }));
+      }
     } else {
       if (balance >= newRecord.amount) {
         setBalance(
