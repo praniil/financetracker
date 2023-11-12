@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import { Pie } from "react-chartjs-2";
+import "chart.js/auto";
 
 interface balanceInterface {
   passBalance: {
@@ -25,6 +26,7 @@ interface recordInterface {
   };
 }
 type props = balanceInterface & recordInterface;
+
 const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
   // interface newRecord {
   //   typeNew: string;
@@ -56,12 +58,13 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
 
   function handleRecordChange(event: any) {
     const { name, value } = event.target;
-    setNewRecord({
-      ...newRecord,
+    setNewRecord((prevRecord) => ({
+      ...prevRecord,
       [name]: value,
-    });
-    console.log(newRecord);
+    }));
   }
+
+  //piechart
 
   function getRandomColor() {
     const letters = "0123456789ABCDEF";
@@ -72,14 +75,14 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
     return color;
   }
 
-  const [fields, setFields] = useState<string[]>([]);
+  const [fields, setFields] = useState<string[]>([newRecord.category]);
   interface pieData {
     data: number[];
     backgroundColor: string[];
   }
   const [dataset, setDataset] = useState<pieData>({
-    data: [],
-    backgroundColor: [],
+    data: [newRecord.amount],
+    backgroundColor: [getRandomColor()],
   });
 
   function handleAddRecord(event: React.FormEvent) {
@@ -88,14 +91,25 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
       setBalance(
         (prevBalance) => Number(prevBalance) + Number(newRecord.amount)
       );
-      setFields([...fields, newRecord.typeNew]);
-      setDataset({
-        ...dataset,
-        data: [newRecord.amount],
-        backgroundColor: [getRandomColor()],
-      });
+      setFields((prevFields) => [...prevFields, newRecord.category]);
+      setDataset((prevDataset) => ({
+        data: [...prevDataset.data, newRecord.amount],
+        backgroundColor: [...prevDataset.backgroundColor, getRandomColor()],
+      }));
+    } else {
+      if (balance >= newRecord.amount) {
+        setBalance(
+          (prevBalance) => Number(prevBalance) - Number(newRecord.amount)
+        );
+        setFields((prevFields) => [...prevFields, newRecord.category]);
+        setDataset((prevDataset) => ({
+          data: [...prevDataset.data, newRecord.amount],
+          backgroundColor: [...prevDataset.backgroundColor, getRandomColor()],
+        }));
+      }
     }
   }
+
   const data = {
     labels: fields,
     datasets: [dataset],
