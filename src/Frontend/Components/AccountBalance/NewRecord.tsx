@@ -93,23 +93,19 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
       setBalance(
         (prevBalance) => Number(prevBalance) + Number(newRecord.amount)
       );
-      if (newRecord.category !== "Income" && newRecord.typeNew !== "INCOME") {
-        setFields((prevFields) => [...prevFields, newRecord.category]);
-        setDataset((prevDataset) => ({
-          data: [...prevDataset.data, newRecord.amount],
-          backgroundColor: [...prevDataset.backgroundColor, getRandomColor()],
-        }));
-      }
     } else {
+      setBalance(
+        (prevBalance) => Number(prevBalance) - Number(newRecord.amount)
+      );
       if (balance >= newRecord.amount) {
-        setBalance(
-          (prevBalance) => Number(prevBalance) - Number(newRecord.amount)
-        );
         setFields((prevFields) => [...prevFields, newRecord.category]);
         setDataset((prevDataset) => ({
           data: [...prevDataset.data, newRecord.amount],
           backgroundColor: [...prevDataset.backgroundColor, getRandomColor()],
         }));
+      } else {
+        setBalance(balance);
+        alert("Insufficient Balance");
       }
     }
   }
