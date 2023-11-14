@@ -98,6 +98,25 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
         (prevBalance) => Number(prevBalance) - Number(newRecord.amount)
       );
       if (balance >= newRecord.amount) {
+        const categoryIndex = fields.indexOf(newRecord.category);
+        if (categoryIndex !== -1) {
+          setDataset((prevDataset) => {
+            const newData = [...prevDataset.data];
+            newData[categoryIndex] += newRecord.amount;
+
+            return {
+              data: newData,
+              backgroundColor: prevDataset.backgroundColor,
+            };
+          });
+        } else {
+          // Category does not exist, add a new one
+          setFields((prevFields) => [...prevFields, newRecord.category]);
+          setDataset((prevDataset) => ({
+            data: [...prevDataset.data, newRecord.amount],
+            backgroundColor: [...prevDataset.backgroundColor, getRandomColor()],
+          }));
+        }
         setFields((prevFields) => [...prevFields, newRecord.category]);
         setDataset((prevDataset) => ({
           data: [...prevDataset.data, newRecord.amount],
