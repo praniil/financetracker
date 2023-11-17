@@ -89,20 +89,26 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
 
   function handleAddRecord(event: React.FormEvent) {
     event.preventDefault();
+
+    // Check if it's an expense or income
     if (newRecord.typeNew === expenseType[0]) {
       setBalance(
         (prevBalance) => Number(prevBalance) + Number(newRecord.amount)
       );
     } else {
-      setBalance(
-        (prevBalance) => Number(prevBalance) - Number(newRecord.amount)
-      );
       if (balance >= newRecord.amount) {
+        setBalance(
+          (prevBalance) => Number(prevBalance) - Number(newRecord.amount)
+        );
+
         const categoryIndex = fields.indexOf(newRecord.category);
+
         if (categoryIndex !== -1) {
+          // If category already exists, update the existing dataset
           setDataset((prevDataset) => {
             const newData = [...prevDataset.data];
-            newData[categoryIndex] += newRecord.amount;
+            newData[categoryIndex] =
+              Number(newData[categoryIndex]) + Number(newRecord.amount);
 
             return {
               data: newData,
@@ -110,20 +116,15 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
             };
           });
         } else {
-          // Category does not exist, add a new one
+          // If category does not exist, add a new category and update the dataset
           setFields((prevFields) => [...prevFields, newRecord.category]);
           setDataset((prevDataset) => ({
             data: [...prevDataset.data, newRecord.amount],
             backgroundColor: [...prevDataset.backgroundColor, getRandomColor()],
           }));
         }
-        setFields((prevFields) => [...prevFields, newRecord.category]);
-        setDataset((prevDataset) => ({
-          data: [...prevDataset.data, newRecord.amount],
-          backgroundColor: [...prevDataset.backgroundColor, getRandomColor()],
-        }));
       } else {
-        setBalance(balance);
+        // If balance is insufficient, display an alert and don't update the balance
         alert("Insufficient Balance");
       }
     }
