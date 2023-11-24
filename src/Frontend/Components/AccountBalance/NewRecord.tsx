@@ -125,10 +125,24 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
         console.error("An error occurred while updating balance: ", error);
       }
     } else {
+      //balance table update
       if (balance >= newRecord.amount) {
-        setBalance(
-          (prevBalance) => Number(prevBalance) - Number(newRecord.amount)
-        );
+        try {
+          const response = await axios.post(
+            "http://localhost:8080/api/update-balance",
+            {
+              userBalance: Number(balance) - Number(newRecord.amount),
+            }
+          );
+          console.log("response", response);
+          if (response.status === 200) {
+            fetchUpdateBalance();
+          } else {
+            console.error("Failed to update balance");
+          }
+        } catch (error) {
+          console.error("An error occurred while updating balance: ", error);
+        }
 
         const categoryIndex = fields.indexOf(newRecord.category);
 
