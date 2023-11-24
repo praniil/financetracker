@@ -4,6 +4,7 @@ import { useState } from "react";
 // npm install react-chartjs-2@latest chart.js@latest
 import { Pie } from "react-chartjs-2";
 import "chart.js/auto";
+import axios from "axios";
 
 interface balanceInterface {
   passBalance: {
@@ -87,14 +88,42 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
     backgroundColor: [getRandomColor()],
   });
 
-  function handleAddRecord(event: React.FormEvent) {
+  const fetchUpdateBalance = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/api/get-balance");
+      const updateBalance = response.data.balance;
+      setBalance(updateBalance);
+    } catch (error) {
+      console.error("Error fetching updated balance: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUpdateBalance();
+  }, []);
+
+  async function handleAddRecord(event: React.FormEvent) {
     event.preventDefault();
 
     // Check if it's an expense or income
     if (newRecord.typeNew === expenseType[0]) {
-      setBalance(
-        (prevBalance) => Number(prevBalance) + Number(newRecord.amount)
-      );
+      try {
+        console.log("in try");
+        const response = await axios.post(
+          "http://localhost:8080/api/update-balance",
+          {
+            userBalance: Number(balance) + Number(newRecord.amount),
+          }
+        );
+        console.log("response", response);
+        if (response.status === 200) {
+          fetchUpdateBalance();
+        } else {
+          console.error("Failed to update balance");
+        }
+      } catch (error) {
+        console.error("An error occurred while updating balance: ", error);
+      }
     } else {
       if (balance >= newRecord.amount) {
         setBalance(
