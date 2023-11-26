@@ -126,6 +126,9 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
       }
     } else {
       //balance table update
+      console.log("here");
+      console.log(balance);
+      console.log(newRecord.amount);
       if (balance >= newRecord.amount) {
         try {
           const response = await axios.post(
