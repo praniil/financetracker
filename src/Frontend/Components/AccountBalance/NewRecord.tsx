@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Pie } from "react-chartjs-2";
 import "chart.js/auto";
 import axios from "axios";
+import App from "../../../App";
 
 interface balanceInterface {
   passBalance: {
@@ -129,7 +130,7 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
       console.log("here");
       console.log(balance);
       console.log(newRecord.amount);
-      if (balance >= newRecord.amount) {
+      if (Number(balance) >= Number(newRecord.amount)) {
         try {
           const response = await axios.post(
             "http://localhost:8080/api/update-balance",
@@ -161,6 +162,10 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
               backgroundColor: prevDataset.backgroundColor,
             };
           });
+        await axios.post('http://localhost:8080/api/update-field', {
+          fields : fields,
+          data : dataset.data
+        })
         } else {
           // If category does not exist, add a new category and update the dataset
           setFields((prevFields) => [...prevFields, newRecord.category]);

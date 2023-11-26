@@ -42,6 +42,12 @@ app.post("/api/update-balance", async (req: Request, res: Response) => {
   }
 });
 
+app.post("/api/update-field", async(req: Request, res: Response) => {
+  const { fields, data} = req.body;
+  console.log(req.body);
+  
+})
+
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });

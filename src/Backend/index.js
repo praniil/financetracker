@@ -91,6 +91,14 @@ app.post("/api/update-balance", function (req, res) { return __awaiter(void 0, v
         }
     });
 }); });
+app.post("/api/update-field", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, fields, data;
+    return __generator(this, function (_b) {
+        _a = req.body, fields = _a.fields, data = _a.data;
+        console.log(req.body);
+        return [2 /*return*/];
+    });
+}); });
 app.listen(port, function () {
     console.log("App listening on port ".concat(port));
 });
