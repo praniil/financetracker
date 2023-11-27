@@ -42,10 +42,20 @@ app.post("/api/update-balance", async (req: Request, res: Response) => {
   }
 });
 
+app.get("/api/get-field", async (req: Request, res: Response) => {
+  try {
+    const result = await db.query("SELECT data FROM finbalance WHERE id = 1");
+    const data = result.rows[0].data;
+    res.json({ data });
+  } catch (error) {
+    console.error("Error fetching data: ", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 app.post("/api/update-field", async (req: Request, res: Response) => {
   try {
     const { fields, data } = req.body;
-    console.log(req.body);
+
     if (
       !Array.isArray(fields) ||
       !Array.isArray(data) ||
@@ -53,17 +63,29 @@ app.post("/api/update-field", async (req: Request, res: Response) => {
     ) {
       return res.status(400).json({ error: "Invalid fields or data format" });
     }
-    const jsonData: { [key: string]: string } = {}; // Initialize an empty object for constructing the JSON data
+
+    const existingDataQuery = await db.query(
+      "SELECT data FROM finbalance WHERE id = 1"
+    );
+    const existingData = existingDataQuery.rows[0].data || {};
 
     for (let i = 0; i < fields.length; i++) {
-      const field: string = fields[i];
-      const value: string = data[i];
-      jsonData[field] = value;
+      const field = fields[i];
+      const value = parseInt(data[i], 10) || 0; // Convert to number, default to 0 if conversion fails
+
+      if (existingData.hasOwnProperty(field)) {
+        existingData[field] = parseInt(existingData[field], 10) + value;
+      } else {
+        existingData[field] = value;
+      }
     }
-    const jsonDataAsJsonb = JSON.stringify(jsonData);
+
+    const updatedDataAsJsonb = JSON.stringify(existingData);
+
     await db.query("UPDATE finbalance SET data = $1::jsonb WHERE id = 1", [
-      jsonDataAsJsonb,
+      updatedDataAsJsonb,
     ]);
+
     res.status(200).json({ message: "Data inserted successfully" });
   } catch (error) {
     console.error("Error inserting data:", error);
