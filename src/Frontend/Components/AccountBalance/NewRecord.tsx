@@ -78,12 +78,18 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
     }
     return color;
   }
-
-  const [fields, setFields] = useState<string[]>([newRecord.category]);
   interface pieData {
     data: number[];
     backgroundColor: string[];
   }
+
+  const [fields, setFields] = useState<string[]>([newRecord.category]);
+  //state for the database
+  const [databaseField, setDatabaseField] = useState<string[]>([]);
+  const [databaseData, setDatabaseData] = useState<pieData>({
+    data: [],
+    backgroundColor: [getRandomColor()],
+  });
   const [dataset, setDataset] = useState<pieData>({
     data: [newRecord.amount],
     backgroundColor: [getRandomColor()],
@@ -98,10 +104,31 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
       console.error("Error fetching updated balance: ", error);
     }
   };
+  interface PieData {
+    [key: string]: string[];
+  }
+  const fetchDatabaseData = async () => {
+    console.log("in fetchDatabaseData");
+    try {
+      const response = await axios.get("http://localhost:8080/api/get-field");
+      const updateFieldData: PieData = response.data.data;
 
+      const keys = Object.keys(updateFieldData) as string[];
+      const values = Object.values(updateFieldData).flat() as string[];
+      setDatabaseField(keys);
+      setDatabaseData((prevData) => ({
+        ...prevData,
+        data: values.map((val) => parseInt(val, 10)), // Convert strings to numbers
+        backgroundColor: [...prevData.backgroundColor, getRandomColor()],
+      }));
+    } catch (error) {
+      console.error("error fetching database fields in newRecords", error);
+    }
+  };
   useEffect(() => {
     fetchUpdateBalance();
-  }, [balance]);
+    fetchDatabaseData();
+  }, [balance, databaseData, databaseField]);
 
   async function handleAddRecord(event: React.FormEvent) {
     event.preventDefault();
@@ -162,10 +189,18 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
               backgroundColor: prevDataset.backgroundColor,
             };
           });
-        await axios.post('http://localhost:8080/api/update-field', {
-          fields : fields,
-          data : dataset.data
-        })
+          const response = await axios.post(
+            "http://localhost:8080/api/update-field",
+            {
+              fields: fields,
+              data: dataset.data,
+            }
+          );
+          if (response.status === 200) {
+            fetchDatabaseData();
+          } else {
+            console.error("failed to update the field and data of piechart");
+          }
         } else {
           // If category does not exist, add a new category and update the dataset
           setFields((prevFields) => [...prevFields, newRecord.category]);
@@ -182,8 +217,8 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
   }
 
   const data = {
-    labels: fields,
-    datasets: [dataset],
+    labels: databaseField,
+    datasets: [databaseData],
   };
 
   return (

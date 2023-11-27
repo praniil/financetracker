@@ -4,7 +4,6 @@ import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import AccBalance from "./Frontend/Components/AccountBalance/AccBalance";
-import Stats from "./Frontend/Components/ExpenseStructure/Stats";
 import AddAccount from "./Frontend/Components/AccountBalance/AddAccount";
 import Navbar from "./Frontend/Navbar/Navbar";
 import Template from "./Frontend/Components/AccountBalance/Template";
@@ -32,7 +31,6 @@ function App() {
             element={
               <>
                 <AccBalance passBalance={{ balance, setBalance }} />
-                <Stats passRecord={{ newRecord, setNewRecord}} />{" "}
               </>
             }
           />

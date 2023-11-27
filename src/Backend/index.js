@@ -91,39 +91,67 @@ app.post("/api/update-balance", function (req, res) { return __awaiter(void 0, v
         }
     });
 }); });
+app.get("/api/get-field", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var result, data, error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, database_1.default.query("SELECT data FROM finbalance WHERE id = 1")];
+            case 1:
+                result = _a.sent();
+                data = result.rows[0].data;
+                res.json({ data: data });
+                return [3 /*break*/, 3];
+            case 2:
+                error_3 = _a.sent();
+                console.error("Error fetching data: ", error_3);
+                res.status(500).json({ error: "Internal Server Error" });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
 app.post("/api/update-field", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, fields, data, jsonData, i, field, value, jsonDataAsJsonb, error_3;
+    var _a, fields, data, existingDataQuery, existingData, i, field, value, updatedDataAsJsonb, error_4;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _b.trys.push([0, 2, , 3]);
+                _b.trys.push([0, 3, , 4]);
                 _a = req.body, fields = _a.fields, data = _a.data;
-                console.log(req.body);
                 if (!Array.isArray(fields) ||
                     !Array.isArray(data) ||
                     fields.length !== data.length) {
                     return [2 /*return*/, res.status(400).json({ error: "Invalid fields or data format" })];
                 }
-                jsonData = {};
+                return [4 /*yield*/, database_1.default.query("SELECT data FROM finbalance WHERE id = 1")];
+            case 1:
+                existingDataQuery = _b.sent();
+                existingData = existingDataQuery.rows[0].data || {};
                 for (i = 0; i < fields.length; i++) {
                     field = fields[i];
-                    value = data[i];
-                    jsonData[field] = value;
+                    value = parseInt(data[i], 10) || 0;
+                    if (existingData.hasOwnProperty(field)) {
+                        existingData[field] = parseInt(existingData[field], 10) + value;
+                    }
+                    else {
+                        existingData[field] = value;
+                    }
                 }
-                jsonDataAsJsonb = JSON.stringify(jsonData);
+                updatedDataAsJsonb = JSON.stringify(existingData);
                 return [4 /*yield*/, database_1.default.query("UPDATE finbalance SET data = $1::jsonb WHERE id = 1", [
-                        jsonDataAsJsonb,
+                        updatedDataAsJsonb,
                     ])];
-            case 1:
+            case 2:
                 _b.sent();
                 res.status(200).json({ message: "Data inserted successfully" });
-                return [3 /*break*/, 3];
-            case 2:
-                error_3 = _b.sent();
-                console.error("Error inserting data:", error_3);
+                return [3 /*break*/, 4];
+            case 3:
+                error_4 = _b.sent();
+                console.error("Error inserting data:", error_4);
                 res.status(500).json({ error: "An error occurred while inserting data" });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });
