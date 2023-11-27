@@ -42,11 +42,34 @@ app.post("/api/update-balance", async (req: Request, res: Response) => {
   }
 });
 
-app.post("/api/update-field", async(req: Request, res: Response) => {
-  const { fields, data} = req.body;
-  console.log(req.body);
-  
-})
+app.post("/api/update-field", async (req: Request, res: Response) => {
+  try {
+    const { fields, data } = req.body;
+    console.log(req.body);
+    if (
+      !Array.isArray(fields) ||
+      !Array.isArray(data) ||
+      fields.length !== data.length
+    ) {
+      return res.status(400).json({ error: "Invalid fields or data format" });
+    }
+    const jsonData: { [key: string]: string } = {}; // Initialize an empty object for constructing the JSON data
+
+    for (let i = 0; i < fields.length; i++) {
+      const field: string = fields[i];
+      const value: string = data[i];
+      jsonData[field] = value;
+    }
+    const jsonDataAsJsonb = JSON.stringify(jsonData);
+    await db.query("UPDATE finbalance SET data = $1::jsonb WHERE id = 1", [
+      jsonDataAsJsonb,
+    ]);
+    res.status(200).json({ message: "Data inserted successfully" });
+  } catch (error) {
+    console.error("Error inserting data:", error);
+    res.status(500).json({ error: "An error occurred while inserting data" });
+  }
+});
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
