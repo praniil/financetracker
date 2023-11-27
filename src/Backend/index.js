@@ -92,11 +92,39 @@ app.post("/api/update-balance", function (req, res) { return __awaiter(void 0, v
     });
 }); });
 app.post("/api/update-field", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, fields, data;
+    var _a, fields, data, jsonData, i, field, value, jsonDataAsJsonb, error_3;
     return __generator(this, function (_b) {
-        _a = req.body, fields = _a.fields, data = _a.data;
-        console.log(req.body);
-        return [2 /*return*/];
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                _a = req.body, fields = _a.fields, data = _a.data;
+                console.log(req.body);
+                if (!Array.isArray(fields) ||
+                    !Array.isArray(data) ||
+                    fields.length !== data.length) {
+                    return [2 /*return*/, res.status(400).json({ error: "Invalid fields or data format" })];
+                }
+                jsonData = {};
+                for (i = 0; i < fields.length; i++) {
+                    field = fields[i];
+                    value = data[i];
+                    jsonData[field] = value;
+                }
+                jsonDataAsJsonb = JSON.stringify(jsonData);
+                return [4 /*yield*/, database_1.default.query("UPDATE finbalance SET data = $1::jsonb WHERE id = 1", [
+                        jsonDataAsJsonb,
+                    ])];
+            case 1:
+                _b.sent();
+                res.status(200).json({ message: "Data inserted successfully" });
+                return [3 /*break*/, 3];
+            case 2:
+                error_3 = _b.sent();
+                console.error("Error inserting data:", error_3);
+                res.status(500).json({ error: "An error occurred while inserting data" });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
     });
 }); });
 app.listen(port, function () {

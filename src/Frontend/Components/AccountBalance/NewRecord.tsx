@@ -101,7 +101,7 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
 
   useEffect(() => {
     fetchUpdateBalance();
-  }, []);
+  }, [balance]);
 
   async function handleAddRecord(event: React.FormEvent) {
     event.preventDefault();
