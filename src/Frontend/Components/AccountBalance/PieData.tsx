@@ -1,21 +1,32 @@
 import React, { useState } from "react";
 import { Pie } from "react-chartjs-2";
 import "chart.js/auto";
-import { usePieDataContext } from "./NewRecord";
 
-export function fetchPieData() {
-  console.log("in piedata fetch");
+interface pieField {
+  passPieField: {
+    databaseField: string[];
+    setDatabaseField: React.Dispatch<React.SetStateAction<string[]>>;
+  };
 }
+interface pieData {
+  passPieData: {
+    databaseData: {
+      data: number[];
+      backgroundColor: string[];
+    };
+    setDatabaseData: React.Dispatch<
+      React.SetStateAction<{
+        data: number[];
+        backgroundColor: string[];
+      }>
+    >;
+  };
+}
+type props = pieField & pieData;
 
-const PieData = () => {
-  const context = usePieDataContext();
-  
-  if (!context) {
-    console.log("context:", context);
-    return <div>No data available</div>;
-  }
-
-  const { databaseField, databaseData } = context;
+const PieData: React.FC<props> = ({ passPieField, passPieData }) => {
+  const { databaseField, setDatabaseField } = passPieField;
+  const { databaseData, setDatabaseData } = passPieData;
   const data = {
     labels: databaseField,
     datasets: [databaseData],
@@ -23,7 +34,9 @@ const PieData = () => {
 
   return (
     <div>
+      hey
       <Pie data={data} />
+      
     </div>
   );
 };
