@@ -1,11 +1,11 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, createContext } from "react";
 import { useState } from "react";
 //npm uninstall react-chartjs-2 chart.js
 // npm install react-chartjs-2@latest chart.js@latest
+import PieData from "./PieData";
 import { Pie } from "react-chartjs-2";
 import "chart.js/auto";
 import axios from "axios";
-import App from "../../../App";
 
 interface balanceInterface {
   passBalance: {
@@ -29,9 +29,34 @@ interface recordInterface {
     >;
   };
 }
-type props = balanceInterface & recordInterface;
+interface pieField {
+  passPieField: {
+    databaseField: string[];
+    setDatabaseField: React.Dispatch<React.SetStateAction<string[]>>;
+  };
+}
+interface pieData {
+  passPieData: {
+    databaseData: {
+      data: number[];
+      backgroundColor: string[];
+    };
+    setDatabaseData: React.Dispatch<
+      React.SetStateAction<{
+        data: number[];
+        backgroundColor: string[];
+      }>
+    >;
+  };
+}
+type props = balanceInterface & recordInterface & pieField & pieData;
 
-const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
+const NewRecord: React.FC<props> = ({
+  passBalance,
+  passRecord,
+  passPieField,
+  passPieData,
+}) => {
   // interface newRecord {
   //   typeNew: string;
   //   amount: number;
@@ -39,6 +64,8 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
   // }
   const { balance, setBalance } = passBalance;
   const { newRecord, setNewRecord } = passRecord;
+  const { databaseField, setDatabaseField } = passPieField;
+  const { databaseData, setDatabaseData } = passPieData;
   // const [newRecord, setNewRecord] = useState<newRecord>({
   //   typeNew: "INCOME",
   //   amount: 0,
@@ -85,11 +112,11 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
 
   const [fields, setFields] = useState<string[]>([newRecord.category]);
   //state for the database
-  const [databaseField, setDatabaseField] = useState<string[]>([]);
-  const [databaseData, setDatabaseData] = useState<pieData>({
-    data: [],
-    backgroundColor: [getRandomColor()],
-  });
+  // const [databaseField, setDatabaseField] = useState<string[]>([]);
+  // const [databaseData, setDatabaseData] = useState<pieData>({
+  //   data: [],
+  //   backgroundColor: [getRandomColor()],
+  // });
   const [dataset, setDataset] = useState<pieData>({
     data: [newRecord.amount],
     backgroundColor: [getRandomColor()],
@@ -268,5 +295,4 @@ const NewRecord: React.FC<props> = ({ passBalance, passRecord }) => {
     </div>
   );
 };
-
 export default NewRecord;
