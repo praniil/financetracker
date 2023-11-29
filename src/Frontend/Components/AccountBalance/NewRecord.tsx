@@ -252,9 +252,10 @@ const NewRecord: React.FC<props> = ({
     datasets: [databaseData],
   };
 
-  return (
-    <div className="h-screen bg-gray-100 flex justify-center items-start">
-      balance: {balance}
+return (
+  <div className="h-screen bg-gray-100 flex justify-center items-start">
+    <div className="flex flex-col items-center">
+      <p className="text-xl font-bold mt-8">Balance: {balance}</p>
       <div className="bg-white p-8 rounded-md shadow-md w-96 mt-8">
         <select
           className="w-full p-2 mb-4 border border-gray-300 rounded-md focus:outline-none"
@@ -293,10 +294,12 @@ const NewRecord: React.FC<props> = ({
           Add Record
         </button>
       </div>
-      <div>
+      <div className="mt-8">
         <Pie data={data} />
       </div>
     </div>
-  );
+  </div>
+);
+
 };
 export default NewRecord;
