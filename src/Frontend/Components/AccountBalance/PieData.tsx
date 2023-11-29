@@ -32,6 +32,16 @@ const PieData: React.FC<props> = ({ passPieField, passPieData }) => {
     labels: databaseField,
     datasets: [databaseData],
   };
+  interface pieObj {
+    [key: string]: number;
+  }
+  const pieChartInfoObject = {} as pieObj;
+  for (let i = 0; i < databaseField.length; i++) {
+    let key: string = databaseField[i];
+    let value: number = databaseData.data[i];
+    pieChartInfoObject[key] = value;
+  }
+  console.log("pieChartInfoObject", pieChartInfoObject);
   const [expenditure, setExpenditure] = useState<number>(0);
   const [showExpenditure, setShowExpenditure] = useState<boolean>(false);
 
@@ -46,13 +56,21 @@ const PieData: React.FC<props> = ({ passPieField, passPieData }) => {
 
   return (
     <div className="w-96 h-96 m-auto pt-10 flex flex-col">
-      <Pie data={data} />
+      <div>
+        <Pie data={data} />
+      </div>
       {showExpenditure ? (
-        <div className="flex mt-2"> 
+        <div className="flex mt-2">
           <div className=" text-sm  rounded-sm text-black bg-white-500 p-1 m-auto ">
             Total: {expenditure}
           </div>
-          <button className="text-xs rounded-sm text-white bg-blue-500 p-1 m-auto" onClick={toggleExpenditure}> Hide </button>
+          <button
+            className="text-xs rounded-sm text-white bg-blue-500 p-1 m-auto"
+            onClick={toggleExpenditure}
+          >
+            {" "}
+            Hide{" "}
+          </button>
         </div>
       ) : (
         <button
@@ -62,6 +80,7 @@ const PieData: React.FC<props> = ({ passPieField, passPieData }) => {
           Show Total Expenditure
         </button>
       )}
+      <div></div>
     </div>
   );
 };
