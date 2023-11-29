@@ -148,6 +148,10 @@ const NewRecord: React.FC<props> = ({
         data: values.map((val) => parseInt(val, 10)), // Convert strings to numbers
         backgroundColor: [...prevData.backgroundColor, getRandomColor()],
       }));
+      <PieData
+        passPieField={{ databaseField, setDatabaseField }}
+        passPieData={{ databaseData, setDatabaseData }}
+      />;
     } catch (error) {
       console.error("error fetching database fields in newRecords", error);
     }
@@ -155,7 +159,7 @@ const NewRecord: React.FC<props> = ({
   useEffect(() => {
     fetchUpdateBalance();
     fetchDatabaseData();
-  }, [balance, databaseData, databaseField]);
+  }, []);
 
   async function handleAddRecord(event: React.FormEvent) {
     event.preventDefault();

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import "chart.js/auto";
 
@@ -25,6 +25,7 @@ interface pieData {
 type props = pieField & pieData;
 
 const PieData: React.FC<props> = ({ passPieField, passPieData }) => {
+  console.log(passPieData);
   const { databaseField, setDatabaseField } = passPieField;
   const { databaseData, setDatabaseData } = passPieData;
   const data = {
@@ -33,10 +34,9 @@ const PieData: React.FC<props> = ({ passPieField, passPieData }) => {
   };
 
   return (
-    <div>
+    <div className="w-96 h-96">
       hey
       <Pie data={data} />
-      
     </div>
   );
 };
