@@ -95,9 +95,9 @@ const PieData: React.FC<Props> = ({ passPieField, passPieData }) => {
             <p
               key={index}
               className={`py-1 px-2 rounded-md text-sm ${
-                index % 2 === 0 ? 'bg-gray-200' : 'bg-blue-200'
+                index % 2 === 0 ? "bg-gray-200" : "bg-blue-200"
               }`}
-            >{`${key}: ${values[index]}`}</p> 
+            >{`${key}: ${values[index]}`}</p>
           ))}
         </div>
       </div>

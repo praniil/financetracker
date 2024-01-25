@@ -1,9 +1,9 @@
+import { Request, Response } from "express";
+import db from "./Database/database";
 const express = require("express");
 const cors = require("cors");
 
-import { Request, Response, response } from "express";
 const bodyParser = require("body-parser");
-import db from "./Database/database";
 const app = express();
 const port = 8080;
 
